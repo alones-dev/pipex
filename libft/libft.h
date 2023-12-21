@@ -6,7 +6,7 @@
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 09:36:02 by kdaumont          #+#    #+#             */
-/*   Updated: 2023/12/06 14:02:08 by kdaumont         ###   ########.fr       */
+/*   Updated: 2023/12/21 13:16:48 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ size_t				ft_strlcat(char *dst, const char *src, size_t dstSize);
 size_t				ft_strlcpy(char *dst, const char *src, size_t size);
 int					ft_strlen(const char *s);
 int					ft_strncmp(const char *s1, const char *s2, size_t n);
+int					ft_strcmp(char *s1, char *s2);
 char				*ft_strnstr(const char *big, const char *little,
 						size_t len);
 char				*ft_strrchr(const char *s, int c);
