@@ -6,7 +6,7 @@
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/18 15:18:15 by kdaumont          #+#    #+#             */
-/*   Updated: 2023/12/22 10:38:10 by kdaumont         ###   ########.fr       */
+/*   Updated: 2023/12/22 11:43:04 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,6 @@ int	main(int ac, char **av, char **envp)
 
 	if (ac != 5)
 		return (0);
-	ft_printf("%d\n", init_pipex(&pipex, av, envp));
+	init_pipex(&pipex, av, envp);
 	return (0);
 }

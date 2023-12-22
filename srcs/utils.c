@@ -6,7 +6,7 @@
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 09:16:26 by kdaumont          #+#    #+#             */
-/*   Updated: 2023/12/22 10:43:06 by kdaumont         ###   ########.fr       */
+/*   Updated: 2023/12/22 11:45:10 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 		* cmd1 & 2 check OK
 		* args1 & 2 check OK
 		* file1 & 2 check OK
-	- Read files
+	- Open files
 		* check file1 & 2 with acces
 		* open fd1 & 2
 	- Create forks
