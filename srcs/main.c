@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test.c                                             :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/18 15:18:15 by kdaumont          #+#    #+#             */
-/*   Updated: 2023/12/21 15:12:36 by kdaumont         ###   ########.fr       */
+/*   Updated: 2023/12/22 10:38:10 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,34 +22,13 @@
 	- Execute command (execve)
 */
 
-/* Get the environment variable given
-@param name -> environment variable name
-@param envp -> program environment
-@return :
-	- char: environment variable
-	- NULL: nothing find
-*/
-char	*ft_getenv(char *name, char **envp)
-{
-	int	i;
-
-	i = 0;
-	while (envp[i])
-	{
-		if (ft_strncmp(envp[i], name, ft_strlen(name)) == 0)
-			return (envp[i]);
-		i++;
-	}
-	return (NULL);
-}
-
+/* Main function */
 int	main(int ac, char **av, char **envp)
 {
-	// pid_t pid
-	(void)av;
-	(void)ac;
-	// if (ac < 5)
-	// 	exit(0);
-	ft_printf("%s\n", ft_getenv("PATH", envp));
+	t_pipex	pipex;
+
+	if (ac != 5)
+		return (0);
+	ft_printf("%d\n", init_pipex(&pipex, av, envp));
 	return (0);
 }
