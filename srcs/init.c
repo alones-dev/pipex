@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 09:16:26 by kdaumont          #+#    #+#             */
-/*   Updated: 2023/12/22 11:45:10 by kdaumont         ###   ########.fr       */
+/*   Updated: 2023/12/22 12:42:43 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,7 @@ void	init_struct(t_pipex *pipex)
 	pipex->file1 = NULL;
 	pipex->fd1 = -1;
 	pipex->fd2 = -1;
-	pipex->pid1 = -1;
-	pipex->pid2 = -1;
+	pipex->pid = -1;
 }
 
 /* Initialize correctly all structure values and check if the two command are valid
@@ -76,5 +75,28 @@ int	init_pipex(t_pipex *pipex, char **av, char **envp)
 	pipex->arg2 = arg2;
 	pipex->file1 = av[1];
 	pipex->file2 = av[4];
+	return (1);
+}
+
+/* Initialize & create the pipe and the fork
+@param pipex -> t_pipex struct pointer
+@param fd[2] -> files descriptor for the pipe
+@return :
+	- 0 : pipe or fork invalid
+	- 1 : fork & pipe success
+*/
+int	init_fork(t_pipex *pipex, int fd[2])
+{
+	if (pipe(fd) == -1)
+		return (0);
+	pipex->pid = fork();
+	if (pipex->pid == -1)
+		return (0);
+	if (pipex->pid == 0)
+	{
+	}
+	else
+	{
+	}
 	return (1);
 }
