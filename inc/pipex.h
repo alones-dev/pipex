@@ -6,7 +6,7 @@
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 09:35:54 by kdaumont          #+#    #+#             */
-/*   Updated: 2023/12/22 12:27:25 by kdaumont         ###   ########.fr       */
+/*   Updated: 2023/12/22 14:12:26 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,11 @@
 
 # include "ft_printf.h"
 # include "libft.h"
+# include <fcntl.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <sys/stat.h>
+# include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
 
@@ -36,5 +39,7 @@ typedef struct s_pipex
 char		*ft_getenv(char *name, char **envp);
 int			find_command(char **path, char **cmd);
 int			init_pipex(t_pipex *pipex, char **av, char **envp);
+int			init_fork(t_pipex *pipex, int fd[2]);
+int			init_files(t_pipex *pipex);
 
 #endif

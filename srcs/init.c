@@ -6,7 +6,7 @@
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 09:16:26 by kdaumont          #+#    #+#             */
-/*   Updated: 2023/12/22 12:42:43 by kdaumont         ###   ########.fr       */
+/*   Updated: 2023/12/22 14:29:02 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@
 		* args1 & 2 check OK
 		* file1 & 2 check OK
 	- Open files
-		* check file1 & 2 with acces
-		* open fd1 & 2
+		* check file1 & 2 with acces OK
+		* open fd1 & 2 OK
 	- Create forks
-		* create pipe
-		* pid1 & 2
+		* create pipe OK
+		* pid OK
 */
 
 /* Initialize the base structure
@@ -98,5 +98,29 @@ int	init_fork(t_pipex *pipex, int fd[2])
 	else
 	{
 	}
+	return (1);
+}
+
+/* Open the two files and put it in the structure if are valids
+@param pipex -> t_pipex struct pointer
+@return :
+	- 0 : fd invalid
+	- 1 : fds open
+*/
+int	init_files(t_pipex *pipex)
+{
+	int fd1;
+	int fd2;
+
+	if (access(pipex->file1, F_OK | R_OK) == -1)
+		return (0);
+	fd1 = open(pipex->file1, O_RDONLY);
+	if (fd1 == -1)
+		return (0);
+	fd2 = open(pipex->file2, O_CREAT | O_WRONLY, S_IWUSR | S_IRUSR);
+	if (fd2 == -1)
+		return (0);
+	pipex->fd1 = fd1;
+	pipex->fd2 = fd2;
 	return (1);
 }
