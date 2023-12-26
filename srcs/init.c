@@ -6,24 +6,11 @@
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 09:16:26 by kdaumont          #+#    #+#             */
-/*   Updated: 2023/12/22 14:29:02 by kdaumont         ###   ########.fr       */
+/*   Updated: 2023/12/26 11:33:03 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-/* TODO:
-	- Init struct
-		* cmd1 & 2 check OK
-		* args1 & 2 check OK
-		* file1 & 2 check OK
-	- Open files
-		* check file1 & 2 with acces OK
-		* open fd1 & 2 OK
-	- Create forks
-		* create pipe OK
-		* pid OK
-*/
 
 /* Initialize the base structure
 @param pipex -> t_pipex struct pointer
