@@ -6,7 +6,7 @@
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 09:36:01 by kdaumont          #+#    #+#             */
-/*   Updated: 2023/12/22 11:36:09 by kdaumont         ###   ########.fr       */
+/*   Updated: 2023/12/28 11:14:28 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	*ft_getenv(char *name, char **envp)
 }
 
 /* Add to back of environment path the '/' & the command
-@param new -> empty allocated str which receive the command path 
+@param new -> empty allocated str which receive the command path
 @param path -> path on environment variable (ex: /usr/bin)
 @param cmd -> shell command (ex: ls)
 */
@@ -52,7 +52,7 @@ void	cmd_cat(char *new, char *path, char *cmd)
 	- 0: cmd not valid
 	- 1: cmd finded
 */
-int	find_command(char **path, char **cmd)
+char	*find_command(char **path, char **cmd)
 {
 	char	*new;
 	int		i;
@@ -77,6 +77,6 @@ int	find_command(char **path, char **cmd)
 		i++;
 	}
 	if (!new)
-		return (0);
-	return (1);
+		return (NULL);
+	return (*cmd);
 }

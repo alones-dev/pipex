@@ -6,7 +6,7 @@
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 09:35:54 by kdaumont          #+#    #+#             */
-/*   Updated: 2023/12/22 14:12:26 by kdaumont         ###   ########.fr       */
+/*   Updated: 2023/12/28 11:38:13 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,12 @@ typedef struct s_pipex
 	char	*file2;
 	int		fd1;
 	int		fd2;
-	int		pid;
+	int		pid1;
+	int		pid2;
 }			t_pipex;
 
 char		*ft_getenv(char *name, char **envp);
-int			find_command(char **path, char **cmd);
+char		*find_command(char **path, char **cmd);
 int			init_pipex(t_pipex *pipex, char **av, char **envp);
 int			init_fork(t_pipex *pipex, int fd[2]);
 int			init_files(t_pipex *pipex);

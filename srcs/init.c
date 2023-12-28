@@ -6,7 +6,7 @@
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 09:16:26 by kdaumont          #+#    #+#             */
-/*   Updated: 2023/12/26 11:33:03 by kdaumont         ###   ########.fr       */
+/*   Updated: 2023/12/28 11:39:06 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ void	init_struct(t_pipex *pipex)
 	pipex->file1 = NULL;
 	pipex->fd1 = -1;
 	pipex->fd2 = -1;
-	pipex->pid = -1;
+	pipex->pid1 = -1;
+	pipex->pid2 = -1;
 }
 
 /* Initialize correctly all structure values and check if the two command are valid
@@ -76,14 +77,19 @@ int	init_fork(t_pipex *pipex, int fd[2])
 {
 	if (pipe(fd) == -1)
 		return (0);
-	pipex->pid = fork();
-	if (pipex->pid == -1)
+	pipex->pid1 = fork();
+	if (pipex->pid1 == -1)
 		return (0);
-	if (pipex->pid == 0)
+	if (pipex->pid1 == 0)
 	{
+		//command 1
 	}
-	else
+	pipex->pid2 = fork();
+	if (pipex->pid2 == -1)
+		return (0);
+	if (pipex->pid2 == 0)
 	{
+		//command 2
 	}
 	return (1);
 }
