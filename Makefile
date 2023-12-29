@@ -6,7 +6,7 @@ FLAGS		=	-g3 -Wall -Wextra -Werror
 # Base compiled files
 INC_FOLDER	=	inc/
 SRC_FOLDER	=	srcs/
-SRC_FILES	=	main.c init.c path.c errors.c
+SRC_FILES	=	path.c main.c
 OBJS		=	$(addprefix $(SRC_FOLDER), $(SRC_FILES:%.c=%.o))
 
 # Printf part
