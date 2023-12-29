@@ -6,7 +6,7 @@
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 10:06:54 by kdaumont          #+#    #+#             */
-/*   Updated: 2023/12/29 14:01:51 by kdaumont         ###   ########.fr       */
+/*   Updated: 2023/12/29 15:53:40 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,19 +30,23 @@ void	free_split(char **split)
 
 /* Execute command given if the process is child
 @param cmd -> shell command for execution
-@param args -> shell command arguments for execution
+@param av -> shell command arguments for execution
 @param fd_in -> first file descriptor, in file
 @param fd_out -> second file descriptor, out file
 @return :
 	- 0 : execution fail
 	- 1 : execution sucess
 */
-int	command_execute(char *cmd, char **args, int fd_in, int fd_out)
+int	command_execute(char *cmd, char *av, int fd_in, int fd_out)
 {
 	pid_t	pid;
+	char **args;
 
 	pid = fork();
 	if (pid == -1)
+		return (0);
+	args = ft_split(av, ' ');
+	if (!args)
 		return (0);
 	if (pid == 0)
 	{
@@ -50,19 +54,10 @@ int	command_execute(char *cmd, char **args, int fd_in, int fd_out)
 			return (0);
 		if (dup2(fd_out, 1) == -1)
 			return (0);
-		ft_printf("cmd: %s  args: %s\n", cmd, *args);
 		if (execve(cmd, args, NULL) == -1)
-		{
-			ft_printf("debug 4\n");
 			return (0);
-		}
-		else
-			ft_printf("YES\n");
-		ft_printf("debug 5\n");
 	}
-	ft_printf("wait 1\n");
 	waitpid(pid, NULL, 0);
-	ft_printf("wait 2\n");
 	return (1);
 }
 
@@ -78,7 +73,6 @@ int	command_execute(char *cmd, char **args, int fd_in, int fd_out)
 int	manage_execution(char **path, char **av, int *fd, int nb_cmd)
 {
 	int		i;
-	int j = 0;
 	char	*file;
 	char	**cmd;
 
@@ -91,10 +85,9 @@ int	manage_execution(char **path, char **av, int *fd, int nb_cmd)
 		if (!cmd)
 			return (0);
 		file = find_command(path, cmd);
-		ft_printf("%s\n", file);
 		if (!file)
 			return (0);
-		if (!command_execute(file, cmd, fd[0], fd[1]))
+		if (!command_execute(file, av[i], fd[0], fd[1]))
 			return (0);
 		free(cmd);
 	}
