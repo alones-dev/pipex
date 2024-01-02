@@ -6,7 +6,7 @@
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 10:06:54 by kdaumont          #+#    #+#             */
-/*   Updated: 2023/12/29 15:53:40 by kdaumont         ###   ########.fr       */
+/*   Updated: 2024/01/02 10:25:20 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,27 +37,48 @@ void	free_split(char **split)
 	- 0 : execution fail
 	- 1 : execution sucess
 */
-int	command_execute(char *cmd, char *av, int fd_in, int fd_out)
+int	command_execute_one(char *cmd, char *av, int fd_in, int fd_out)
 {
-	pid_t	pid;
-	char **args;
+	char	**args;
 
-	pid = fork();
-	if (pid == -1)
-		return (0);
 	args = ft_split(av, ' ');
 	if (!args)
 		return (0);
-	if (pid == 0)
+	// ft_printf("cmd1: %s  av1: %s  fdin1: %d  fdout1: %d\n", cmd, av, fd_in, fd_in);
+	if (dup2(fd_in, 0) == -1 || dup2(fd_out, 2) == -1)
+		return (0);
+	if (execve(cmd, args, NULL) == -1)
+	
+		return (0);
+	(close(fd_in), close(fd_out));
+	return (1);
+}
+
+/* Execute command given if the process is child
+@param cmd -> shell command for execution
+@param av -> shell command arguments for execution
+@param fd_in -> first file descriptor, in file
+@param fd_out -> second file descriptor, out file
+@return :
+	- 0 : execution fail
+	- 1 : execution sucess
+*/
+int	command_execute_two(char *cmd, char *av, int fd_in, int fd_out)
+{
+	char	**args;
+
+	args = ft_split(av, ' ');
+	if (!args)
+		return (0);
+	// ft_printf("cmd2: %s  av2: %s  fdin2: %d  fdout2: %d\n", cmd, av, fd_in, fd_in);
+	if (dup2(fd_in, 0) == -1 || dup2(fd_out, 2) == -1)
+		return (0);
+	if (execve(cmd, args, NULL) == -1)
 	{
-		if (dup2(fd_in, 0) == -1)
-			return (0);
-		if (dup2(fd_out, 1) == -1)
-			return (0);
-		if (execve(cmd, args, NULL) == -1)
-			return (0);
+		perror("cmd2");
+		return (0);
 	}
-	waitpid(pid, NULL, 0);
+	(close(fd_in), close(fd_out));
 	return (1);
 }
 
@@ -65,31 +86,48 @@ int	command_execute(char *cmd, char *av, int fd_in, int fd_out)
 @param path -> PATH environment variable
 @param av -> all commands from argv (av + 2 = skip files)
 @param fd -> the two open file descriptor
-@param nb_cmd -> commands amount in argv
 @return :
 	0 : execution fail
 	1 : all executions success
 */
-int	manage_execution(char **path, char **av, int *fd, int nb_cmd)
+int	manage_execution(char **path, char **av, int *fd)
 {
-	int		i;
-	char	*file;
+	pid_t	pid;
 	char	**cmd;
+	char	*file;
 
 	if (pipe(fd) == -1)
 		return (0);
-	i = -1;
-	while (++i < nb_cmd)
+	pid = fork();
+	if (pid == -1)
+		return (0);
+	cmd = ft_split(av[0], ' ');
+	if (!cmd)
+		return (0);
+	file = find_command(path, cmd);
+	if (pid == 0)
 	{
-		cmd = ft_split(av[i], ' ');
-		if (!cmd)
+		if (command_execute_one(file, av[0], fd[0], fd[1]) == -1)
+		{
+			perror(av[0]);
 			return (0);
-		file = find_command(path, cmd);
-		if (!file)
+		}
+	}
+	free(cmd);
+	cmd = ft_split(av[1], ' ');
+	if (!cmd)
+		return (0);
+	file = find_command(path, cmd);
+	pid = fork();
+	if (pid == -1)
+		return (0);
+	if (pid == 0)
+	{
+		if (command_execute_two(file, av[1], fd[0], fd[1]) == -1)
+		{
+			perror(av[1]);
 			return (0);
-		if (!command_execute(file, av[i], fd[0], fd[1]))
-			return (0);
-		free(cmd);
+		}
 	}
 	return (1);
 }
@@ -109,7 +147,7 @@ int	main(int ac, char **av, char **envp)
 	if (fd[1] < 0)
 		return (1);
 	path = ft_split(ft_getenv("PATH", envp), ':');
-	if (!manage_execution(path, av + 2, fd, ac - 3))
+	if (!manage_execution(path, av + 2, fd))
 		return (1);
 	return (0);
 }
