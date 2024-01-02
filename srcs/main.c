@@ -6,7 +6,7 @@
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 10:06:54 by kdaumont          #+#    #+#             */
-/*   Updated: 2024/01/02 10:25:20 by kdaumont         ###   ########.fr       */
+/*   Updated: 2024/01/02 14:11:14 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,9 @@ int	command_execute_one(char *cmd, char *av, int fd_in, int fd_out)
 	args = ft_split(av, ' ');
 	if (!args)
 		return (0);
-	// ft_printf("cmd1: %s  av1: %s  fdin1: %d  fdout1: %d\n", cmd, av, fd_in, fd_in);
-	if (dup2(fd_in, 0) == -1 || dup2(fd_out, 2) == -1)
+	if (dup2(fd_in, 0) == -1 || dup2(fd_out, 1) == -1)
 		return (0);
 	if (execve(cmd, args, NULL) == -1)
-	
 		return (0);
 	(close(fd_in), close(fd_out));
 	return (1);
@@ -70,14 +68,10 @@ int	command_execute_two(char *cmd, char *av, int fd_in, int fd_out)
 	args = ft_split(av, ' ');
 	if (!args)
 		return (0);
-	// ft_printf("cmd2: %s  av2: %s  fdin2: %d  fdout2: %d\n", cmd, av, fd_in, fd_in);
-	if (dup2(fd_in, 0) == -1 || dup2(fd_out, 2) == -1)
+	if (dup2(fd_in, 0) == -1 || dup2(fd_out, 1) == -1)
 		return (0);
 	if (execve(cmd, args, NULL) == -1)
-	{
-		perror("cmd2");
 		return (0);
-	}
 	(close(fd_in), close(fd_out));
 	return (1);
 }
@@ -106,13 +100,8 @@ int	manage_execution(char **path, char **av, int *fd)
 		return (0);
 	file = find_command(path, cmd);
 	if (pid == 0)
-	{
 		if (command_execute_one(file, av[0], fd[0], fd[1]) == -1)
-		{
-			perror(av[0]);
 			return (0);
-		}
-	}
 	free(cmd);
 	cmd = ft_split(av[1], ' ');
 	if (!cmd)
@@ -122,13 +111,8 @@ int	manage_execution(char **path, char **av, int *fd)
 	if (pid == -1)
 		return (0);
 	if (pid == 0)
-	{
 		if (command_execute_two(file, av[1], fd[0], fd[1]) == -1)
-		{
-			perror(av[1]);
 			return (0);
-		}
-	}
 	return (1);
 }
 
