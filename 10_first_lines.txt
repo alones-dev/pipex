@@ -1,0 +1,7 @@
+# Base$
+NAME		=	pipex$
+CC			=	cc$
+FLAGS		=	-g3 -Wall -Wextra -Werror$
+$
+# Base compiled files$
+INC_FOLDER	=	inc/$
