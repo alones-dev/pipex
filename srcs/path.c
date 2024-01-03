@@ -6,7 +6,7 @@
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 09:36:01 by kdaumont          #+#    #+#             */
-/*   Updated: 2024/01/03 10:15:19 by kdaumont         ###   ########.fr       */
+/*   Updated: 2024/01/03 16:24:51 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	cmd_cat(char *new, char *path, char *cmd)
 	- 0: cmd not valid
 	- 1: cmd finded
 */
-char	*find_command(char **path, char **cmd)
+char	*find_command(char **path, char *cmd)
 {
 	char	*new;
 	int		i;
@@ -60,23 +60,20 @@ char	*find_command(char **path, char **cmd)
 	i = 0;
 	while (path[i])
 	{
-		new = ft_calloc(ft_strlen(path[i]) + ft_strlen(*cmd) + 2, sizeof(char));
+		new = ft_calloc(ft_strlen(path[i]) + ft_strlen(cmd) + 2, sizeof(char));
 		if (!new)
-			return (0);
-		cmd_cat(new, path[i], *cmd);
+			return (NULL);
+		cmd_cat(new, path[i], cmd);
 		if (access(new, F_OK | X_OK) == -1)
 		{
-			new = NULL;
 			free(new);
+			new = NULL;
 		}
 		else
-		{
-			*cmd = new;
 			break ;
-		}
 		i++;
 	}
 	if (!new)
 		return (NULL);
-	return (*cmd);
+	return (new);
 }

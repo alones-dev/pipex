@@ -6,7 +6,7 @@
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 09:35:54 by kdaumont          #+#    #+#             */
-/*   Updated: 2023/12/29 10:46:32 by kdaumont         ###   ########.fr       */
+/*   Updated: 2024/01/03 16:24:02 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
-char		*ft_getenv(char *name, char **envp);
-char		*find_command(char **path, char **cmd);
+char	*ft_getenv(char *name, char **envp);
+char	*find_command(char **path, char *cmd);
+void	free_split(char **split);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 10:06:54 by kdaumont          #+#    #+#             */
-/*   Updated: 2024/01/03 10:44:36 by kdaumont         ###   ########.fr       */
+/*   Updated: 2024/01/03 16:28:29 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ int	command_execute_one(char *cmd, char *av, char *file, int *fd)
 		return (perror("dup2"), 0);
 	(close(fd[0]), close(fd[1]));
 	if (execve(cmd, args, NULL) == -1)
-		return (perror("execve"), 0);
-	return (free_split(args), 1);
+		return (free_split(args), perror("execve"), 0);
+	return (1);
 }
 
 /* Execute command given if the process is child
@@ -80,13 +80,13 @@ int	command_execute_two(char *cmd, char *av, char *file, int *fd)
 		return (perror("dup2"), 0);
 	(close(fd[0]), close(fd[1]));
 	if (execve(cmd, args, NULL) == -1)
-		return (perror("execve"), 0);
-	return (free_split(args), 1);
+		return (free_split(args), perror("execve"), 0);
+	return (1);
 }
 
 /* Execute all command and link them with pipe
 @param path -> PATH environment variable
-@param av -> all commands from argv (av + 2 = skip files)
+@param av -> main argv
 @param fd -> the two open file descriptor
 @return :
 	0 : execution fail
@@ -103,22 +103,27 @@ int	manage_execution(char **path, char **av, int *fd)
 	pid = fork();
 	if (pid == -1)
 		return (perror("fork"), 0);
-	cmd = ft_split(av[2], ' ');
-	if (!cmd)
-		return (0);
-	file = find_command(path, cmd);
 	if (pid == 0)
-		if (command_execute_one(file, av[2], av[1], fd) == -1)
+	{
+		cmd = ft_split(av[2], ' ');
+		if (!cmd)
 			return (0);
-	free_split(cmd);
-	cmd = ft_split(av[3], ' ');
-	if (!cmd)
-		return (0);
-	file = find_command(path, cmd);
+		file = find_command(path, cmd[0]);
+		free_split(cmd);
+		if (!command_execute_one(file, av[2], av[1], fd))
+			return (free(file), 0);
+	}
 	if (pid != 0)
-		if (command_execute_two(file, av[3], av[4], fd) == -1)
+	{
+		cmd = ft_split(av[3], ' ');
+		if (!cmd)
 			return (0);
-	return (free_split(cmd), 1);
+		file = find_command(path, cmd[0]);
+		free_split(cmd);
+		if (!command_execute_two(file, av[3], av[4], fd))
+			return (free(file), 0);
+	}
+	return (1);
 }
 
 /* Main function */
@@ -128,12 +133,12 @@ int	main(int ac, char **av, char **envp)
 	char	**path;
 
 	if (ac < 5)
-		return (ft_putstr_fd("Command usage: ./pipex file1 cmd1 cmd2 file2\n", STDERR_FILENO),
-			1);
+		return (ft_putstr_fd("Command usage: ./pipex file1 cmd1 cmd2 file2\n",
+				STDERR_FILENO), 1);
 	path = ft_split(ft_getenv("PATH", envp), ':');
 	if (!path)
-		return (free_split(path), 0);
+		return (0);
 	if (!manage_execution(path, av, fd))
-		exit(1);
+		return (free_split(path), 1);
 	return (free_split(path), 0);
 }
