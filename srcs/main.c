@@ -6,7 +6,7 @@
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 10:06:54 by kdaumont          #+#    #+#             */
-/*   Updated: 2024/01/03 09:19:36 by kdaumont         ###   ########.fr       */
+/*   Updated: 2024/01/03 10:44:36 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,17 +43,17 @@ int	command_execute_one(char *cmd, char *av, char *file, int *fd)
 
 	args = ft_split(av, ' ');
 	if (!args)
-		return (0);
+		return (free_split(args), 0);
 	close(fd[0]);
 	fd[0] = open(file, O_RDONLY);
 	if (fd[0] < 0)
-		return (0);
+		return (perror("fd[0]"), 0);
 	if (dup2(fd[0], 0) == -1 || dup2(fd[1], 1) == -1)
-		return (0);
+		return (perror("dup2"), 0);
 	(close(fd[0]), close(fd[1]));
 	if (execve(cmd, args, NULL) == -1)
-		return (0);
-	return (1);
+		return (perror("execve"), 0);
+	return (free_split(args), 1);
 }
 
 /* Execute command given if the process is child
@@ -71,17 +71,17 @@ int	command_execute_two(char *cmd, char *av, char *file, int *fd)
 
 	args = ft_split(av, ' ');
 	if (!args)
-		return (0);
+		return (free_split(args), 0);
 	close(fd[1]);
 	fd[1] = open(file, O_CREAT | O_WRONLY | O_TRUNC, S_IWUSR | S_IRUSR);
 	if (fd[1] < 0)
-		return (0);
+		return (perror("fd[1]"), 0);
 	if (dup2(fd[0], 0) == -1 || dup2(fd[1], 1) == -1)
-		return (0);
+		return (perror("dup2"), 0);
 	(close(fd[0]), close(fd[1]));
 	if (execve(cmd, args, NULL) == -1)
-		return (0);
-	return (1);
+		return (perror("execve"), 0);
+	return (free_split(args), 1);
 }
 
 /* Execute all command and link them with pipe
@@ -99,10 +99,10 @@ int	manage_execution(char **path, char **av, int *fd)
 	char	*file;
 
 	if (pipe(fd) == -1)
-		return (0);
+		return (perror("pipe"), 0);
 	pid = fork();
 	if (pid == -1)
-		return (0);
+		return (perror("fork"), 0);
 	cmd = ft_split(av[2], ' ');
 	if (!cmd)
 		return (0);
@@ -110,7 +110,7 @@ int	manage_execution(char **path, char **av, int *fd)
 	if (pid == 0)
 		if (command_execute_one(file, av[2], av[1], fd) == -1)
 			return (0);
-	free(cmd);
+	free_split(cmd);
 	cmd = ft_split(av[3], ' ');
 	if (!cmd)
 		return (0);
@@ -118,7 +118,7 @@ int	manage_execution(char **path, char **av, int *fd)
 	if (pid != 0)
 		if (command_execute_two(file, av[3], av[4], fd) == -1)
 			return (0);
-	return (1);
+	return (free_split(cmd), 1);
 }
 
 /* Main function */
@@ -128,11 +128,12 @@ int	main(int ac, char **av, char **envp)
 	char	**path;
 
 	if (ac < 5)
-		return (1);
+		return (ft_putstr_fd("Command usage: ./pipex file1 cmd1 cmd2 file2\n", STDERR_FILENO),
+			1);
 	path = ft_split(ft_getenv("PATH", envp), ':');
 	if (!path)
-		return (0);
+		return (free_split(path), 0);
 	if (!manage_execution(path, av, fd))
-		return (1);
-	return (0);
+		exit(1);
+	return (free_split(path), 0);
 }
