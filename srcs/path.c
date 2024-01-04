@@ -6,7 +6,7 @@
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 09:36:01 by kdaumont          #+#    #+#             */
-/*   Updated: 2024/01/04 10:22:28 by kdaumont         ###   ########.fr       */
+/*   Updated: 2024/01/04 11:02:28 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ char	*find_command(char **path, char *cmd)
 @param fd -> two file descriptor
 @return :
 	- 0 : execution fail
-	- 1 : execution sucess 
+	- 1 : execution sucess
 */
 int	execute_child_process(char **path, char **av, int *fd)
 {
@@ -96,6 +96,8 @@ int	execute_child_process(char **path, char **av, int *fd)
 		return (0);
 	file = find_command(path, cmd[0]);
 	free_split(cmd);
+	if (!file)
+		return (close(fd[0]), close(fd[1]), 0);
 	if (!command_execute_one(file, av[2], av[1], fd))
 		return (free(file), 0);
 	return (1);
@@ -107,7 +109,7 @@ int	execute_child_process(char **path, char **av, int *fd)
 @param fd -> two file descriptor
 @return :
 	- 0 : execution fail
-	- 1 : execution sucess 
+	- 1 : execution sucess
 */
 int	execute_parent_process(char **path, char **av, int *fd)
 {
@@ -119,6 +121,8 @@ int	execute_parent_process(char **path, char **av, int *fd)
 		return (0);
 	file = find_command(path, cmd[0]);
 	free_split(cmd);
+	if (!file)
+		return (close(fd[0]), close(fd[1]), 0);
 	if (!command_execute_two(file, av[3], av[4], fd))
 		return (free(file), 0);
 	return (1);

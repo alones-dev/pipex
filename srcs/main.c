@@ -6,7 +6,7 @@
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 10:06:54 by kdaumont          #+#    #+#             */
-/*   Updated: 2024/01/04 10:00:50 by kdaumont         ###   ########.fr       */
+/*   Updated: 2024/01/04 11:02:37 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,11 @@ int	command_execute_one(char *cmd, char *av, char *file, int *fd)
 	close(fd[0]);
 	fd[0] = open(file, O_RDONLY);
 	if (fd[0] < 0)
-		return (perror("fd[0]"), 0);
+		return (free_split(args), close(fd[0]), close(fd[1]), perror("fd[0]"),
+			0);
 	if (dup2(fd[0], 0) == -1 || dup2(fd[1], 1) == -1)
-		return (perror("dup2"), 0);
+		return (free_split(args), close(fd[0]), close(fd[1]), perror("dup2"),
+			0);
 	(close(fd[0]), close(fd[1]));
 	if (execve(cmd, args, NULL) == -1)
 		return (free_split(args), perror("execve"), 0);
@@ -75,9 +77,11 @@ int	command_execute_two(char *cmd, char *av, char *file, int *fd)
 	close(fd[1]);
 	fd[1] = open(file, O_CREAT | O_WRONLY | O_TRUNC, S_IWUSR | S_IRUSR);
 	if (fd[1] < 0)
-		return (perror("fd[1]"), 0);
+		return (free_split(args), close(fd[0]), close(fd[1]), perror("fd[1]"),
+			0);
 	if (dup2(fd[0], 0) == -1 || dup2(fd[1], 1) == -1)
-		return (perror("dup2"), 0);
+		return (free_split(args), close(fd[0]), close(fd[1]), perror("dup2"),
+			0);
 	(close(fd[0]), close(fd[1]));
 	if (execve(cmd, args, NULL) == -1)
 		return (free_split(args), perror("execve"), 0);
@@ -105,7 +109,6 @@ int	manage_execution(char **path, char **av, int *fd)
 		return (execute_child_process(path, av, fd));
 	else
 		return (execute_parent_process(path, av, fd));
-	waitpid(pid, NULL, 0);
 	return (1);
 }
 
@@ -115,7 +118,7 @@ int	main(int ac, char **av, char **envp)
 	int		fd[2];
 	char	**path;
 
-	if (ac < 5)
+	if (ac != 5)
 		return (ft_putstr_fd("Command usage: ./pipex file1 cmd1 cmd2 file2\n",
 				STDERR_FILENO), 1);
 	path = ft_split(ft_getenv("PATH", envp), ':');

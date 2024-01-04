@@ -6,7 +6,7 @@
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 09:35:54 by kdaumont          #+#    #+#             */
-/*   Updated: 2024/01/04 10:01:17 by kdaumont         ###   ########.fr       */
+/*   Updated: 2024/01/04 10:30:13 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ char	*ft_getenv(char *name, char **envp);
 char	*find_command(char **path, char *cmd);
 void	free_split(char **split);
 int		command_execute_two(char *cmd, char *av, char *file, int *fd);
-int	execute_child_process(char **path, char **av, int *fd);
-int	execute_parent_process(char **path, char **av, int *fd);
+int		command_execute_one(char *cmd, char *av, char *file, int *fd);
+int		execute_child_process(char **path, char **av, int *fd);
+int		execute_parent_process(char **path, char **av, int *fd);
 
 #endif
