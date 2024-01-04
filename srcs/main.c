@@ -6,11 +6,17 @@
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 10:06:54 by kdaumont          #+#    #+#             */
-/*   Updated: 2024/01/04 11:02:37 by kdaumont         ###   ########.fr       */
+/*   Updated: 2024/01/04 16:23:59 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+/* TODO
+	wait
+	code erreur
+	path local
+*/
 
 /* Free the double array filled by split
 @param split -> double array filled
@@ -109,7 +115,7 @@ int	manage_execution(char **path, char **av, int *fd)
 		return (execute_child_process(path, av, fd));
 	else
 		return (execute_parent_process(path, av, fd));
-	return (1);
+	return (pid);
 }
 
 /* Main function */
@@ -117,6 +123,7 @@ int	main(int ac, char **av, char **envp)
 {
 	int		fd[2];
 	char	**path;
+	pid_t pid;
 
 	if (ac != 5)
 		return (ft_putstr_fd("Command usage: ./pipex file1 cmd1 cmd2 file2\n",
@@ -124,7 +131,8 @@ int	main(int ac, char **av, char **envp)
 	path = ft_split(ft_getenv("PATH", envp), ':');
 	if (!path)
 		return (0);
-	if (!manage_execution(path, av, fd))
+	pid = manage_execution(path, av, fd);
+	if (!pid)
 		return (free_split(path), 1);
-	return (free_split(path), 0);
+	return (free_split(path), wait_childs(pid), 0);
 }

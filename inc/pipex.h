@@ -6,7 +6,7 @@
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 09:35:54 by kdaumont          #+#    #+#             */
-/*   Updated: 2024/01/04 10:30:13 by kdaumont         ###   ########.fr       */
+/*   Updated: 2024/01/04 16:22:52 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "ft_printf.h"
 # include "libft.h"
+# include <errno.h>
 # include <fcntl.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -30,5 +31,6 @@ int		command_execute_two(char *cmd, char *av, char *file, int *fd);
 int		command_execute_one(char *cmd, char *av, char *file, int *fd);
 int		execute_child_process(char **path, char **av, int *fd);
 int		execute_parent_process(char **path, char **av, int *fd);
+int		wait_childs(int pid);
 
 #endif
