@@ -6,7 +6,7 @@
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 09:36:01 by kdaumont          #+#    #+#             */
-/*   Updated: 2024/01/04 10:00:59 by kdaumont         ###   ########.fr       */
+/*   Updated: 2024/01/04 10:22:28 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,14 @@ char	*find_command(char **path, char *cmd)
 	return (new);
 }
 
-// Function to execute code for the child process
+/* Function to execute code for the child process
+@param path -> array of all path on environment variable
+@param av -> shell command arguments for execution
+@param fd -> two file descriptor
+@return :
+	- 0 : execution fail
+	- 1 : execution sucess 
+*/
 int	execute_child_process(char **path, char **av, int *fd)
 {
 	char	**cmd;
@@ -94,7 +101,14 @@ int	execute_child_process(char **path, char **av, int *fd)
 	return (1);
 }
 
-// Function to execute code for the parent process
+/* Function to execute code for the child process
+@param path -> array of all path on environment variable
+@param av -> shell command arguments for execution
+@param fd -> two file descriptor
+@return :
+	- 0 : execution fail
+	- 1 : execution sucess 
+*/
 int	execute_parent_process(char **path, char **av, int *fd)
 {
 	char	**cmd;
