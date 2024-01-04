@@ -6,7 +6,7 @@
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 10:06:54 by kdaumont          #+#    #+#             */
-/*   Updated: 2024/01/03 16:28:29 by kdaumont         ###   ########.fr       */
+/*   Updated: 2024/01/04 09:34:14 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,15 +114,9 @@ int	manage_execution(char **path, char **av, int *fd)
 			return (free(file), 0);
 	}
 	if (pid != 0)
-	{
-		cmd = ft_split(av[3], ' ');
-		if (!cmd)
+		if (!send_command(cmd, file, av, path, fd))
 			return (0);
-		file = find_command(path, cmd[0]);
-		free_split(cmd);
-		if (!command_execute_two(file, av[3], av[4], fd))
-			return (free(file), 0);
-	}
+	waitpid(pid, NULL, 0);
 	return (1);
 }
 

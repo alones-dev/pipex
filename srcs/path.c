@@ -6,7 +6,7 @@
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 09:36:01 by kdaumont          #+#    #+#             */
-/*   Updated: 2024/01/03 16:24:51 by kdaumont         ###   ########.fr       */
+/*   Updated: 2024/01/04 09:28:26 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,4 +76,19 @@ char	*find_command(char **path, char *cmd)
 	if (!new)
 		return (NULL);
 	return (new);
+}
+
+/* Send second command for norminette
+@param cmd -> 
+*/
+int	send_command(char **cmd, char *file, char **av, char **path, int *fd)
+{
+	cmd = ft_split(av[3], ' ');
+	if (!cmd)
+		return (0);
+	file = find_command(path, cmd[0]);
+	free_split(cmd);
+	if (!command_execute_two(file, av[3], av[4], fd))
+		return (free(file), 0);
+	return (1);
 }
