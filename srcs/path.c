@@ -6,7 +6,7 @@
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 09:36:01 by kdaumont          #+#    #+#             */
-/*   Updated: 2024/01/04 09:28:26 by kdaumont         ###   ########.fr       */
+/*   Updated: 2024/01/04 10:00:59 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,11 +78,28 @@ char	*find_command(char **path, char *cmd)
 	return (new);
 }
 
-/* Send second command for norminette
-@param cmd -> 
-*/
-int	send_command(char **cmd, char *file, char **av, char **path, int *fd)
+// Function to execute code for the child process
+int	execute_child_process(char **path, char **av, int *fd)
 {
+	char	**cmd;
+	char	*file;
+
+	cmd = ft_split(av[2], ' ');
+	if (!cmd)
+		return (0);
+	file = find_command(path, cmd[0]);
+	free_split(cmd);
+	if (!command_execute_one(file, av[2], av[1], fd))
+		return (free(file), 0);
+	return (1);
+}
+
+// Function to execute code for the parent process
+int	execute_parent_process(char **path, char **av, int *fd)
+{
+	char	**cmd;
+	char	*file;
+
 	cmd = ft_split(av[3], ' ');
 	if (!cmd)
 		return (0);

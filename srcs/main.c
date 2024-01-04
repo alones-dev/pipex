@@ -6,7 +6,7 @@
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 10:06:54 by kdaumont          #+#    #+#             */
-/*   Updated: 2024/01/04 09:34:14 by kdaumont         ###   ########.fr       */
+/*   Updated: 2024/01/04 10:00:50 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,6 @@ int	command_execute_two(char *cmd, char *av, char *file, int *fd)
 int	manage_execution(char **path, char **av, int *fd)
 {
 	pid_t	pid;
-	char	**cmd;
-	char	*file;
 
 	if (pipe(fd) == -1)
 		return (perror("pipe"), 0);
@@ -104,18 +102,9 @@ int	manage_execution(char **path, char **av, int *fd)
 	if (pid == -1)
 		return (perror("fork"), 0);
 	if (pid == 0)
-	{
-		cmd = ft_split(av[2], ' ');
-		if (!cmd)
-			return (0);
-		file = find_command(path, cmd[0]);
-		free_split(cmd);
-		if (!command_execute_one(file, av[2], av[1], fd))
-			return (free(file), 0);
-	}
-	if (pid != 0)
-		if (!send_command(cmd, file, av, path, fd))
-			return (0);
+		return (execute_child_process(path, av, fd));
+	else
+		return (execute_parent_process(path, av, fd));
 	waitpid(pid, NULL, 0);
 	return (1);
 }
