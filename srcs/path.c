@@ -6,7 +6,7 @@
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 09:36:01 by kdaumont          #+#    #+#             */
-/*   Updated: 2024/01/04 11:02:28 by kdaumont         ###   ########.fr       */
+/*   Updated: 2024/01/08 15:37:04 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*ft_getenv(char *name, char **envp)
 	int	i;
 
 	i = 0;
-	while (envp[i])
+	while (envp && envp[i])
 	{
 		if (ft_strncmp(envp[i], name, ft_strlen(name)) == 0)
 			return (envp[i]);
@@ -58,6 +58,12 @@ char	*find_command(char **path, char *cmd)
 	int		i;
 
 	i = 0;
+	if (ft_strchr(cmd, '/') && !access(cmd, X_OK))
+		return (cmd);
+	else if (ft_strchr(cmd, '/') && access(cmd, X_OK))
+		return ((void)ft_printf("Command %s not found\n", cmd), NULL);
+	if (!path)
+		return (cmd);
 	while (path[i])
 	{
 		new = ft_calloc(ft_strlen(path[i]) + ft_strlen(cmd) + 2, sizeof(char));

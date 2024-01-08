@@ -6,15 +6,11 @@
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 10:06:54 by kdaumont          #+#    #+#             */
-/*   Updated: 2024/01/08 09:20:07 by kdaumont         ###   ########.fr       */
+/*   Updated: 2024/01/08 15:47:49 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-/* TODO
-	path local
-*/
 
 /* Free the double array filled by split
 @param split -> double array filled
@@ -121,18 +117,24 @@ int	main(int ac, char **av, char **envp)
 {
 	int		fd[2];
 	char	**path;
+	char	*env;
 	pid_t	pid;
 
 	if (ac != 5)
 		return (ft_putstr_fd("Command usage: ./pipex file1 cmd1 cmd2 file2\n",
 				STDERR_FILENO), 1);
-	if (!*envp)
-		return (ft_putstr_fd("Environment failed\n", STDERR_FILENO), 1);
-	if (!ft_getenv("PATH", envp))
-		return (ft_putstr_fd("PATH variable failed\n", STDERR_FILENO), 1);
-	path = ft_split(ft_getenv("PATH", envp), ':');
-	if (!path)
-		return (0);
+	if (!av[2] || ft_strlen(av[2]) < 1)
+		return (ft_putstr_fd("Command 1 null\n", STDERR_FILENO), 1);
+	if (!av[3] || ft_strlen(av[3]) < 1)
+		return (ft_putstr_fd("Command 2 null\n", STDERR_FILENO), 1);
+	path = NULL;
+	env = ft_getenv("PATH", envp);
+	if (env)
+	{
+		path = ft_split(env, ':');
+		if (!path)
+			return (0);
+	}
 	pid = manage_execution(path, av, fd);
 	if (!pid)
 		return (free_split(path), 1);
