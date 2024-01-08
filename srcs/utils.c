@@ -6,14 +6,14 @@
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 16:19:01 by kdaumont          #+#    #+#             */
-/*   Updated: 2024/01/04 16:22:14 by kdaumont         ###   ########.fr       */
+/*   Updated: 2024/01/08 09:17:07 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-/* Wait the child process finish
-
+/* Wait the childs process finish
+@param pid -> 
 */
 int	wait_childs(int pid)
 {

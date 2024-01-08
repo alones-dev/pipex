@@ -51,4 +51,4 @@ fclean:		clean
 re:			fclean all
 			@echo "$(GREEN)♫ $(NAME) recompiled successfully! ♫$(DEFAULT)"
 
-.PHONY:		all clean fclean re norm
+.PHONY:		all clean fclean re

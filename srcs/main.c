@@ -6,15 +6,13 @@
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 10:06:54 by kdaumont          #+#    #+#             */
-/*   Updated: 2024/01/04 16:23:59 by kdaumont         ###   ########.fr       */
+/*   Updated: 2024/01/08 09:20:07 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
 /* TODO
-	wait
-	code erreur
 	path local
 */
 
@@ -123,16 +121,20 @@ int	main(int ac, char **av, char **envp)
 {
 	int		fd[2];
 	char	**path;
-	pid_t pid;
+	pid_t	pid;
 
 	if (ac != 5)
 		return (ft_putstr_fd("Command usage: ./pipex file1 cmd1 cmd2 file2\n",
 				STDERR_FILENO), 1);
+	if (!*envp)
+		return (ft_putstr_fd("Environment failed\n", STDERR_FILENO), 1);
+	if (!ft_getenv("PATH", envp))
+		return (ft_putstr_fd("PATH variable failed\n", STDERR_FILENO), 1);
 	path = ft_split(ft_getenv("PATH", envp), ':');
 	if (!path)
 		return (0);
 	pid = manage_execution(path, av, fd);
 	if (!pid)
 		return (free_split(path), 1);
-	return (free_split(path), wait_childs(pid), 0);
+	return (free_split(path), wait_childs(pid));
 }
