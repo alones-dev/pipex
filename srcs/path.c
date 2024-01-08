@@ -6,7 +6,7 @@
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 09:36:01 by kdaumont          #+#    #+#             */
-/*   Updated: 2024/01/08 15:37:04 by kdaumont         ###   ########.fr       */
+/*   Updated: 2024/01/08 21:23:33 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,7 @@ char	*find_command(char **path, char *cmd)
 			return (NULL);
 		cmd_cat(new, path[i], cmd);
 		if (access(new, F_OK | X_OK) == -1)
-		{
-			free(new);
-			new = NULL;
-		}
+			(free(new), new = NULL);
 		else
 			break ;
 		i++;
