@@ -6,27 +6,11 @@
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 10:06:54 by kdaumont          #+#    #+#             */
-/*   Updated: 2024/01/08 15:47:49 by kdaumont         ###   ########.fr       */
+/*   Updated: 2024/01/09 12:49:24 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-/* Free the double array filled by split
-@param split -> double array filled
-*/
-void	free_split(char **split)
-{
-	int	i;
-
-	i = 0;
-	if (split)
-	{
-		while (split[i])
-			free(split[i++]);
-		free(split);
-	}
-}
 
 /* Execute command given if the process is child
 @param cmd -> shell command for execution
@@ -123,10 +107,6 @@ int	main(int ac, char **av, char **envp)
 	if (ac != 5)
 		return (ft_putstr_fd("Command usage: ./pipex file1 cmd1 cmd2 file2\n",
 				STDERR_FILENO), 1);
-	if (!av[2] || ft_strlen(av[2]) < 1)
-		return (ft_putstr_fd("Command 1 null\n", STDERR_FILENO), 1);
-	if (!av[3] || ft_strlen(av[3]) < 1)
-		return (ft_putstr_fd("Command 2 null\n", STDERR_FILENO), 1);
 	path = NULL;
 	env = ft_getenv("PATH", envp);
 	if (env)

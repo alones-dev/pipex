@@ -6,7 +6,7 @@
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 09:36:01 by kdaumont          #+#    #+#             */
-/*   Updated: 2024/01/08 21:23:33 by kdaumont         ###   ########.fr       */
+/*   Updated: 2024/01/09 12:52:30 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,10 @@ int	execute_child_process(char **path, char **av, int *fd)
 	cmd = ft_split(av[2], ' ');
 	if (!cmd)
 		return (0);
-	file = find_command(path, cmd[0]);
+	if (!av[2] || ft_strlen(av[2]) < 1)
+		(ft_printf("Command 1 null\n"), file = NULL);
+	else
+		file = find_command(path, cmd[0]);
 	free_split(cmd);
 	if (!file)
 		return (close(fd[0]), close(fd[1]), 0);
@@ -122,7 +125,10 @@ int	execute_parent_process(char **path, char **av, int *fd)
 	cmd = ft_split(av[3], ' ');
 	if (!cmd)
 		return (0);
-	file = find_command(path, cmd[0]);
+	if (!av[3] || ft_strlen(av[3]) < 1)
+		(ft_printf("Command 2 null\n"), file = NULL);
+	else
+		file = find_command(path, cmd[0]);
 	free_split(cmd);
 	if (!file)
 		return (close(fd[0]), close(fd[1]), 0);
