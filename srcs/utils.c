@@ -6,7 +6,7 @@
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 16:19:01 by kdaumont          #+#    #+#             */
-/*   Updated: 2024/01/09 11:08:35 by kdaumont         ###   ########.fr       */
+/*   Updated: 2024/01/09 14:15:18 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ int	wait_childs(int pid)
 	int	wstatus;
 	int	code;
 
+	code = EXIT_FAILURE;
 	while (errno != ECHILD)
 		if (wait(&wstatus) == pid && WIFEXITED(wstatus))
 			code = WEXITSTATUS(wstatus);

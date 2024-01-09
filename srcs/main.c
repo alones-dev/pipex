@@ -6,7 +6,7 @@
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 10:06:54 by kdaumont          #+#    #+#             */
-/*   Updated: 2024/01/09 12:49:24 by kdaumont         ###   ########.fr       */
+/*   Updated: 2024/01/09 14:35:57 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,8 @@ int	command_execute_one(char *cmd, char *av, char *file, int *fd)
 		return (free_split(args), close(fd[0]), close(fd[1]), perror("dup2"),
 			0);
 	(close(fd[0]), close(fd[1]));
-	if (execve(cmd, args, NULL) == -1)
-		return (free_split(args), perror("execve"), 0);
-	return (1);
+	execve(cmd, args, NULL);
+	(free_split(args), perror("execve"), exit(1));
 }
 
 /* Execute command given if the process is child
@@ -67,9 +66,8 @@ int	command_execute_two(char *cmd, char *av, char *file, int *fd)
 		return (free_split(args), close(fd[0]), close(fd[1]), perror("dup2"),
 			0);
 	(close(fd[0]), close(fd[1]));
-	if (execve(cmd, args, NULL) == -1)
-		return (free_split(args), perror("execve"), 0);
-	return (1);
+	execve(cmd, args, NULL);
+	(free_split(args), perror("execve"), exit(1));
 }
 
 /* Execute all command and link them with pipe
@@ -91,9 +89,12 @@ int	manage_execution(char **path, char **av, int *fd)
 		return (perror("fork"), 0);
 	if (pid == 0)
 		return (execute_child_process(path, av, fd));
-	else
+	(close(fd[1]), pid = fork());
+	if (pid == -1)
+		return (perror("fork"), 0);
+	if (pid == 0)
 		return (execute_parent_process(path, av, fd));
-	return (pid);
+	return (close(fd[0]), pid);
 }
 
 /* Main function */
@@ -105,8 +106,8 @@ int	main(int ac, char **av, char **envp)
 	pid_t	pid;
 
 	if (ac != 5)
-		return (ft_putstr_fd("Command usage: ./pipex file1 cmd1 cmd2 file2\n",
-				STDERR_FILENO), 1);
+		return ((void)ft_printf("Command usage: ./pipex file1 cmd1 cmd2 file2\n"),
+			1);
 	path = NULL;
 	env = ft_getenv("PATH", envp);
 	if (env)
