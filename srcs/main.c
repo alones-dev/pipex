@@ -6,7 +6,7 @@
 /*   By: kdaumont <kdaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 10:06:54 by kdaumont          #+#    #+#             */
-/*   Updated: 2024/01/09 14:35:57 by kdaumont         ###   ########.fr       */
+/*   Updated: 2024/01/09 14:44:53 by kdaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,8 +106,8 @@ int	main(int ac, char **av, char **envp)
 	pid_t	pid;
 
 	if (ac != 5)
-		return ((void)ft_printf("Command usage: ./pipex file1 cmd1 cmd2 file2\n"),
-			1);
+		return (ft_putstr_fd("Command usage: ./pipex file1 cmd1 cmd2 file2\n",
+				STDERR_FILENO), 1);
 	path = NULL;
 	env = ft_getenv("PATH", envp);
 	if (env)
