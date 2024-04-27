@@ -16,10 +16,10 @@ make
 ```
 **3. Enjoy**
 ```
-./pipex Makefile "cat -e" "head -10" out.txt
+./pipex Makefile "cat -e" "wc -l" out.txt
 ```
 is same like
 ```
-< Makefile "cat -e" | "head -10" > out.txt
+< Makefile "cat -e" | "wc -l" > out.txt
 ```
 
